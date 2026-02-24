@@ -11,6 +11,18 @@ import AdminStats from './pages/AdminStats';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import Navbar from './components/Navbar';
+import axios from 'axios';
+
+const api = axios.create({
+  // Point to your live Render backend URL
+  baseURL: import.meta.env.VITE_API_URL || 'https://e-library-backend-r64m.onrender.com/api', 
+  
+  // ADD THIS LINE if you use cookies for authentication:
+  withCredentials: true 
+});
+
+
+
 
 function App() {
   return (
