@@ -19,6 +19,7 @@ const AdminPanel = () => {
   const [csvFile, setCsvFile] = useState(null);
   const [matricMessage, setMatricMessage] = useState({ text: '', type: '' });
   const [matricLoading, setMatricLoading] = useState(false);
+  const [users, setUsers] = useState([]);
 
   const genres = ['Fiction', 'Non-Fiction', 'Science', 'Technology', 'Self Help', 'History', 'Biography'];
 
@@ -43,10 +44,42 @@ const AdminPanel = () => {
     }
   };
 
+
+
+const fetchUsers = async () => {
+  try {
+    const { data } = await api.get('/auth/users');
+    setUsers(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const handleSuspend = async (id) => {
+  if (!window.confirm('Suspend this student?')) return;
+  try {
+    await api.put(`/auth/suspend/${id}`);
+    fetchUsers();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const handleUnsuspend = async (id) => {
+  try {
+    await api.put(`/auth/unsuspend/${id}`);
+    fetchUsers();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
   useEffect(() => {
     fetchBooks();
     fetchMatricNumbers();
+    fetchUsers();
   }, []);
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -188,8 +221,9 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-5xl mx-auto">
+    
+    <div className="min-h-screen bg-gray-100 p-4 md:p-6 overflow-x-hidden">
+      <div className="max-w-5xl mx-auto w-full">
 
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
@@ -299,7 +333,7 @@ const AdminPanel = () => {
           ) : (
             <div className="space-y-4">
               {books.map((book) => (
-                <div key={book._id} className="flex items-center justify-between border border-gray-200 rounded-xl p-4">
+                <div key={book._id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between border border-gray-200 rounded-xl p-4 gap-3">
                   <div className="flex items-center gap-4">
                     <img src={book.coverImage} alt={book.title} className="w-12 h-16 object-cover rounded" />
                     <div>
@@ -310,7 +344,7 @@ const AdminPanel = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 ml-16 sm:ml-0">
                     <button onClick={() => handleEdit(book)}
                       className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition text-sm font-semibold">
                       Edit
@@ -340,7 +374,7 @@ const AdminPanel = () => {
             {/* Add single matric */}
             <div>
               <h3 className="font-semibold text-gray-600 mb-3">Add Single Matric Number</h3>
-              <form onSubmit={handleAddMatric} className="flex gap-2">
+              <form onSubmit={handleAddMatric} className="flex flex-col gap-2">
                 <input
                   type="text"
                   value={matricInput}
@@ -359,54 +393,91 @@ const AdminPanel = () => {
             {/* Upload CSV */}
             <div>
               <h3 className="font-semibold text-gray-600 mb-3">Upload CSV File</h3>
-              <form onSubmit={handleCSVUpload} className="flex gap-2">
+              <form onSubmit={handleCSVUpload} className="flex flex-col gap-2">
                 <input
                   type="file"
                   accept=".csv"
                   onChange={(e) => setCsvFile(e.target.files[0])}
-                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2"
                 />
                 <button type="submit" disabled={matricLoading}
-                  className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition disabled:opacity-50">
-                  Upload
+                  className="w-full bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition disabled:opacity-50">
+                  Upload CSV
                 </button>
               </form>
               <p className="text-xs text-gray-400 mt-1">CSV should have matric numbers in the first column</p>
             </div>
           </div>
-
+          {/* Students Management */}
+          <div className="bg-white rounded-2xl shadow-md p-8 mt-10">
+            <h2 className="text-xl font-bold text-gray-700 mb-6">Manage Students ({users.length})</h2>
+            <div className="max-h-96 overflow-y-auto overflow-x-auto">
+              {users.length === 0 ? (
+                <p className="text-gray-500 text-sm">No students registered yet.</p>
+              ) : (
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-gray-50">
+                      <th className="text-left px-4 py-2 font-semibold text-gray-600">Name</th>
+                      <th className="text-left px-4 py-2 font-semibold text-gray-600">Matric No</th>
+                      <th className="text-left px-4 py-2 font-semibold text-gray-600">Status</th>
+                      <th className="text-left px-4 py-2 font-semibold text-gray-600">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map((u) => (
+                      <tr key={u._id} className="border-t border-gray-100">
+                        <td className="px-4 py-2">
+                          <p className="font-medium text-gray-800">{u.name}</p>
+                          <p className="text-xs text-gray-400">{u.email}</p>
+                        </td>
+                        <td className="px-4 py-2 font-mono text-xs">{u.matricNumber}</td>
+                        <td className="px-4 py-2">
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${u.isSuspended ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                            {u.isSuspended ? 'Suspended' : 'Active'}
+                          </span>
+                        </td>
+                        <td className="px-4 py-2">
+                          <div className="flex gap-2">
+                            {u.isSuspended ? (
+                              <button onClick={() => handleUnsuspend(u._id)}
+                                className="bg-green-100 text-green-600 px-3 py-1 rounded-lg hover:bg-green-200 transition text-xs font-semibold">
+                                Unsuspend
+                              </button>
+                            ) : (
+                              <button onClick={() => handleSuspend(u._id)}
+                                className="bg-red-100 text-red-600 px-3 py-1 rounded-lg hover:bg-red-200 transition text-xs font-semibold">
+                                Suspend
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
           {/* Matric Numbers List */}
-          <div className="max-h-64 overflow-y-auto">
+          <div className="max-h-64 overflow-y-auto space-y-2">
             {matricNumbers.length === 0 ? (
               <p className="text-gray-500 text-sm">No matric numbers added yet.</p>
             ) : (
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-gray-50">
-                    <th className="text-left px-4 py-2 font-semibold text-gray-600">Matric Number</th>
-                    <th className="text-left px-4 py-2 font-semibold text-gray-600">Status</th>
-                    <th className="text-left px-4 py-2 font-semibold text-gray-600">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {matricNumbers.map((m) => (
-                    <tr key={m._id} className="border-t border-gray-100">
-                      <td className="px-4 py-2 font-mono">{m.matricNumber}</td>
-                      <td className="px-4 py-2">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${m.isUsed ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
-                          {m.isUsed ? 'Used' : 'Available'}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2">
-                        <button onClick={() => handleDeleteMatric(m._id)}
-                          className="text-red-500 hover:underline text-xs">
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              matricNumbers.map((m) => (
+                <div key={m._id} className="flex items-center justify-between border border-gray-200 rounded-xl px-4 py-3">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="font-mono text-sm text-gray-800">{m.matricNumber}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${m.isUsed ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                      {m.isUsed ? 'Used' : 'Available'}
+                    </span>
+                  </div>
+                  <button onClick={() => handleDeleteMatric(m._id)}
+                    className="bg-red-100 text-red-600 px-3 py-1 rounded-lg hover:bg-red-200 transition text-xs font-semibold flex-shrink-0 ml-2">
+                    Delete
+                  </button>
+                </div>
+              ))
             )}
           </div>
         </div>
