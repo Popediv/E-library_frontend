@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import bgImage from '../assets/7.jpg';
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', matricNumber: '' });
@@ -30,10 +31,29 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-bold text-blue-700 mb-2">Create Account</h2>
-        <p className="text-gray-500 mb-6">Join the library and start reading</p>
+    <div
+      className="min-h-screen flex items-center justify-center py-10"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* Register Card */}
+      <div
+        className="p-8 rounded-2xl shadow-2xl w-full max-w-md mx-4"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.75)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+        }}
+      >
+        <div className="text-center mb-6">
+          <span className="text-5xl">📚</span>
+          <h2 className="text-3xl font-bold text-blue-700 mt-2">Create Account</h2>
+          <p className="text-gray-500 mt-1">Join the library and start reading</p>
+        </div>
 
         {error && (
           <div className="bg-red-100 text-red-600 px-4 py-2 rounded-lg mb-4 text-sm">
@@ -51,7 +71,7 @@ const Register = () => {
               onChange={handleChange}
               required
               placeholder="John Doe"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white bg-opacity-80"
             />
           </div>
 
@@ -64,7 +84,7 @@ const Register = () => {
               onChange={handleChange}
               required
               placeholder="e.g. CSC/2021/001"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white bg-opacity-80"
             />
           </div>
 
@@ -77,7 +97,7 @@ const Register = () => {
               onChange={handleChange}
               required
               placeholder="you@example.com"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white bg-opacity-80"
             />
           </div>
 
@@ -90,7 +110,7 @@ const Register = () => {
               onChange={handleChange}
               required
               placeholder="••••••••"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white bg-opacity-80"
             />
           </div>
 

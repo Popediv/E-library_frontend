@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import bgImage from '../assets/8.jpg';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -30,10 +31,29 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-bold text-blue-700 mb-2">Welcome Back</h2>
-        <p className="text-gray-500 mb-6">Login to access your library</p>
+    <div
+      className="min-h-screen flex items-center justify-center"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'mobile' ? 'scroll' : 'fixed',
+      }}
+    >
+      {/* Login Card */}
+      <div
+        className="p-8 rounded-2xl shadow-2xl w-full max-w-md mx-4"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.75)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+        }}
+      >
+        <div className="text-center mb-6">
+          <span className="text-5xl">📚</span>
+          <h2 className="text-3xl font-bold text-blue-700 mt-2">Welcome Back</h2>
+          <p className="text-gray-500 mt-1">Login to access your library</p>
+        </div>
 
         {error && (
           <div className="bg-red-100 text-red-600 px-4 py-2 rounded-lg mb-4 text-sm">
