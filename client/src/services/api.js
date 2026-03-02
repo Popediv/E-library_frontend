@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Change to your backend URL
+  baseURL: 'https://e-library-backend-r64m.onrender.com/api', // Change to your backend URL
   withCredentials: true // Include cookies for authentication if your backend uses them
 });
 
