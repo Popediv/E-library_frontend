@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     resetTimer();
 
     return () => {
-      events.forEach(event => window.removeEventItem(event, resetTimer));
+      events.forEach(event => window.removeEventListener(event, resetTimer));
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [user, resetTimer]);

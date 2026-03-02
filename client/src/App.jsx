@@ -15,7 +15,7 @@ import axios from 'axios';
 
 const api = axios.create({
   // Point to your live Render backend URL
-  baseURL: import.meta.env.VITE_API_URL || 'https://e-library-backend-r64m.onrender.com/api', 
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api', // Change to your backend URL
   
   // ADD THIS LINE if you use cookies for authentication:
   withCredentials: true 

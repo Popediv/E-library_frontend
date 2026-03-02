@@ -118,32 +118,51 @@ const Home = () => {
       </div>
 
       {/* Features Section */}
-      <div className={`py-16 px-6 ${darkMode ? 'bg-slate-900' : 'bg-gray-50'}`}>
-        <div className="max-w-5xl mx-auto">
-          <h2 className={`text-3xl font-bold text-center mb-12 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-            Why Use Our Library?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: '📱', title: 'Read Anywhere', desc: 'Access your books from any device — phone, tablet or computer.' },
-              { icon: '🔒', title: 'Secure Access', desc: 'Only registered students with valid matric numbers can access.' },
-              { icon: '⚡', title: 'Instant Access', desc: 'No waiting. Search, find and read your book instantly.' },
-              { icon: '📂', title: 'All Genres', desc: 'From Science to Fiction — we have books for every interest.' },
-              { icon: '🆓', title: 'Free Resources', desc: 'Most books are completely free for enrolled students.' },
-              { icon: '🎓', title: 'Academic Focus', desc: 'Curated content specifically for academic excellence.' },
-            ].map((feature, i) => (
-              <div
-                key={i}
-                className={`p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${darkMode ? 'bg-slate-800 text-white' : 'bg-white'}`}
-              >
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
-                <p className={`text-sm ${darkMode ? 'text-slate-400' : 'text-gray-500'}`}>{feature.desc}</p>
-              </div>
-            ))}
+<div className={`py-16 px-6 ${darkMode ? 'bg-slate-900' : 'bg-gradient-to-b from-blue-50 to-white'}`}>
+  <div className="max-w-5xl mx-auto">
+    <h2 className={`text-3xl font-bold text-center mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+      Why Use Our Library?
+    </h2>
+    <p className={`text-center mb-12 ${darkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+      Everything you need for a better learning experience
+    </p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {[
+        { icon: '📱', title: 'Read Anywhere', desc: 'Access your books from any device — phone, tablet or computer.', color: 'from-blue-500 to-blue-600' },
+        { icon: '🔒', title: 'Secure Access', desc: 'Only registered students with valid matric numbers can access.', color: 'from-purple-500 to-purple-600' },
+        { icon: '⚡', title: 'Instant Access', desc: 'No waiting. Search, find and read your book instantly.', color: 'from-yellow-500 to-orange-500' },
+        { icon: '📂', title: 'All Genres', desc: 'From Science to Fiction — we have books for every interest.', color: 'from-green-500 to-green-600' },
+        { icon: '🆓', title: 'Free Resources', desc: 'Most books are completely free for enrolled students.', color: 'from-teal-500 to-teal-600' },
+        { icon: '🎓', title: 'Academic Focus', desc: 'Curated content specifically for academic excellence.', color: 'from-red-500 to-pink-500' },
+      ].map((feature, i) => (
+        <div
+          key={i}
+          className={`rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${darkMode ? 'bg-slate-800' : 'bg-white'}`}
+        >
+          {/* Colored top bar - light mode only */}
+          {!darkMode && (
+            <div className={`bg-gradient-to-r ${feature.color} p-4 flex items-center gap-3`}>
+              <span className="text-3xl">{feature.icon}</span>
+              <h3 className="text-lg font-bold text-white">{feature.title}</h3>
+            </div>
+          )}
+
+          {/* Dark mode card header */}
+          {darkMode && (
+            <div className="p-4 flex items-center gap-3 border-b border-slate-700">
+              <span className="text-3xl">{feature.icon}</span>
+              <h3 className="text-lg font-bold text-white">{feature.title}</h3>
+            </div>
+          )}
+
+          <div className="p-5">
+            <p className={`text-sm ${darkMode ? 'text-slate-400' : 'text-gray-500'}`}>{feature.desc}</p>
           </div>
         </div>
-      </div>
+      ))}
+    </div>
+  </div>
+</div>
 
       {/* CTA Section */}
       <div style={{ position: 'relative', padding: '64px 24px', textAlign: 'center', overflow: 'hidden' }}>
